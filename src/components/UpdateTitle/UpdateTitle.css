@@ -1,0 +1,20 @@
+
+.UpdateTitle input {
+    display: block;
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    outline: none;
+    font: inherit;
+    
+    
+}
+
+.UpdateTitle button {
+    display: block;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    font: inherit;
+}

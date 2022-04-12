@@ -1,0 +1,24 @@
+.Content {
+    width: 100%;
+    margin: auto;
+}
+.Posts {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    width: 80%;
+    margin: auto;
+}
+
+.UpdateTitle {
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+    margin: auto;
+}
+
+.PostDetails {
+    width: 80%;
+    margin: auto;
+}
+
