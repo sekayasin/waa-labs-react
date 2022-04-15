@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Post from "../../components/Post/Post";
 import axios from "axios"
+import { PostContext } from "../../store/PostContext";
 
 const DUMMY_POSTS = [
   {
@@ -28,6 +29,8 @@ const Posts = (props) => {
 
   const [posts, setPosts] = useState(DUMMY_POSTS);
 
+  const {setSelected, fetchFlag} = useContext(PostContext);
+
   const fetchPosts = () => {
     axios.get('http://localhost:8080/api/v1/posts')
     .then(response => {
@@ -40,17 +43,15 @@ const Posts = (props) => {
 
   useEffect( () => {
     fetchPosts()
-  }, [props.fetchFlag]);
+  }, [fetchFlag]);
 
   const postList = posts.map((post) => {
     return (
       <Post
+        id={post.id}
         title={post.title}
         author={"Author: " + post.author}
         key={post.id}
-        setSelected={() => {
-          props.setSelected(post.id);
-        }}
       />
     );
   });

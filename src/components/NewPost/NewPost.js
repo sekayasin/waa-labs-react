@@ -1,48 +1,49 @@
-import axios from 'axios';
-import { useState } from 'react';
-import './NewPost.css';
+import axios from "axios";
+import { useContext, useRef, useState } from "react";
+import { PostContext } from "../../store/PostContext";
+import "./NewPost.css";
 
 const NewPost = (props) => {
+  
+  const { setSelected, fetchFlag, selectedPost, changeFetchFlag } = useContext(PostContext);
 
-    const [postState, setPostState] = useState(
-        {
-            title: "",
-            author: "",
-            content: ""
-        }
-    )
+  const newPostForm = useRef();
 
-    const onChange = (event) => {
-        const updatedPosts = { ...postState, [event.target.name]: event.target.value}
-        setPostState(updatedPosts);
-    }
+  const addButtonClicked = (event) => {
+      event.preventDefault();
+      const formData = newPostForm.current;
+      const newPost = {
+          title: formData['title'].value,
+          author: formData['author'].value,
+          content: formData['content'].value
+      }
+    axios
+      .post("http://localhost:8080/api/v1/posts", newPost)
+      .then((response) => {
+        // re-load
+        formData.reset();
+        changeFetchFlag();
+      })
+      .catch((err) => console.log(err));
+  };
 
-    const addButtonClicked = () => {
-        axios.post('http://localhost:8080/api/v1/posts', postState)
-        .then(response => {
-            setPostState({title:"", author:"", content:""})
-            // re-load
-            props.changeFetchFlag()
-        })
-        .catch(err => console.log(err));
-    }
+  return (
+    <div className="newPost">
+      <h1>Add a Post</h1>
+      <form action="#" ref={newPostForm}>
+        <label htmlFor="#">Title</label>
+        <input type="text" label={"title"} name={"title"}/>
 
-    return (
-        <div className="newPost">
-            <h1>Add a Post</h1>
+        <label htmlFor="#">Author</label>
+        <input type="text" label={"author"} name={"author"}/>
 
-            <label htmlFor="#">Title</label>
-            <input type="text" label={'title'} name={'title'} onChange={onChange} value={postState.title}/>
+        <label htmlFor="#">Content</label>
+        <textarea name={"content"} rows="4" cols="50"></textarea>
 
-            <label htmlFor="#">Author</label>
-            <input type="text" label={'author'} name={'author'} onChange={onChange} value={postState.author}/>
-
-            <label htmlFor="#">Content</label>
-            <textarea name={'content'} rows="4" cols="50" onChange={onChange} value={postState.content}></textarea>
-
-            <button onClick={addButtonClicked}>Add Post</button>
-        </div>
-    );
-}
+        <button onClick={addButtonClicked}>Add Post</button>
+      </form>
+    </div>
+  );
+};
 
 export default NewPost;

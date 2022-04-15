@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { PostContext } from "../../store/PostContext";
 import Comment from "../Comment/Comment";
 import "./PostDetails.css";
 const PostDetails = (props) => {
@@ -7,11 +8,13 @@ const PostDetails = (props) => {
   const [postContent, setPostContent] = useState({});
   const [postComment, setPostComment] = useState([]);
 
+  const {setSelected, fetchFlag, selectedPost, changeFetchFlag} = useContext(PostContext)
+
   const getPostData = () => {
     let endpoints = [
-      "http://localhost:8080/api/v1/posts/" + props.postId,
-      "http://localhost:8080/api/v1/posts/" + props.postId + "/content",
-      "http://localhost:8080/api/v1/posts/" + props.postId + "/comments",
+      "http://localhost:8080/api/v1/posts/" + selectedPost,
+      "http://localhost:8080/api/v1/posts/" + selectedPost + "/content",
+      "http://localhost:8080/api/v1/posts/" + selectedPost + "/comments",
     ];
     Promise.all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then(
@@ -30,21 +33,21 @@ const PostDetails = (props) => {
 
   useEffect(() => {
     getPostData();
-  }, [props.postId]);
+  }, [selectedPost]);
 
   const deleteSelectedPost = (id) => {
     axios
       .delete("http://localhost:8080/api/v1/posts/" + id)
       .then((response) => {
         // re-fetch
-        props.changeFetchFlag();
+        changeFetchFlag();
       })
       .catch((err) => console.log(err.message));
   };
 
   let postDetailsDisplay = null;
 
-  if (props.postId !== 0) {
+  if (selectedPost !== 0) {
     postDetailsDisplay = (
       <div className="PostDetailsContent" key={postDetail.id}>
         <h1>{postDetail.title}</h1>
@@ -62,7 +65,7 @@ const PostDetails = (props) => {
           href="#delete"
           onClick={(event) => {
             event.preventDefault();
-            deleteSelectedPost(props.postId);
+            deleteSelectedPost(selectedPost);
           }}
         >
           delete
@@ -72,7 +75,7 @@ const PostDetails = (props) => {
           <div>
             {postComment !== null
               ? postComment.map((comment) => {
-                  return <Comment comment={comment.comment} />;
+                  return <Comment comment={comment.comment} key={comment.id}/>;
                 })
               : null}
           </div>
