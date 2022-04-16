@@ -2,10 +2,10 @@
 
 Each Lab is pushed in its own branch
 
-## Lab9 - React (Hooks)
+## Lab10 - React Router
 
-This Lab is a continuation of Lab8 using useContext, useRef hooks
+This Lab is a continuation of Lab9, separate the components using react-router
 
-- Make the selected id for post a global value by using useContext()
-- Make the NewPost form sent with useref()
-- Make the Comment components render only when you render the PostDetails, it should not re-render unless the selected post (selected id) changes.
+- Make a header that will have a link for the Post component and for the NewPost
+- Place the Posts and NewPost in a separate pages
+- Make a login page (Login component) that will be accessed by clicking on the sign in link

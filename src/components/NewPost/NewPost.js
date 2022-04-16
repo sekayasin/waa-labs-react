@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useContext, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PostContext } from "../../store/PostContext";
 import "./NewPost.css";
 
 const NewPost = (props) => {
+
+  const navigate = useNavigate();
   
   const { setSelected, fetchFlag, selectedPost, changeFetchFlag } = useContext(PostContext);
 
@@ -22,7 +25,8 @@ const NewPost = (props) => {
       .then((response) => {
         // re-load
         formData.reset();
-        changeFetchFlag();
+        // changeFetchFlag();
+        navigate("/posts")
       })
       .catch((err) => console.log(err));
   };

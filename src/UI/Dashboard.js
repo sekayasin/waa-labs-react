@@ -1,9 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./Dashboard.css";
 import Posts from "../containers/Posts/Posts";
 import PostDetails from "../components/PostDetails/PostDetails";
 import NewPost from "../components/NewPost/NewPost";
 import { PostContext } from "../store/PostContext";
+import { Route, Routes } from "react-router-dom";
+import PageRoutes from "./PageRoutes";
+import Header from "../containers/Header/Header";
+import "../containers/Header/Header.css";
 
 const Dashboard = () => {
   const [selectedPost, setSelectedPost] = useState(0);
@@ -19,19 +23,16 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="Content">
+    <React.Fragment>
       <PostContext.Provider value={{setSelected, fetchFlag, selectedPost, changeFetchFlag}}>
-        <div className="Posts">
-          <Posts />
-        </div>
-        <div className="PostDetails">
-          <PostDetails />
+        <div className="header">
+          <Header/>
         </div>
         <div>
-          <NewPost />
+          <PageRoutes />
         </div>
       </PostContext.Provider>
-    </div>
+    </React.Fragment>
   );
 };
 

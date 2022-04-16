@@ -10,6 +10,10 @@
     margin: auto;
 }
 
+.Posts a {
+    text-decoration: none;
+}
+
 .UpdateTitle {
     display: flex;
     justify-content: flex-start;

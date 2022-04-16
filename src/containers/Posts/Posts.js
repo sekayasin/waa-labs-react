@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import Post from "../../components/Post/Post";
 import axios from "axios"
 import { PostContext } from "../../store/PostContext";
+import { Link } from "react-router-dom";
+import PostDetails from "../../components/PostDetails/PostDetails";
 
 const DUMMY_POSTS = [
   {
@@ -47,16 +49,27 @@ const Posts = (props) => {
 
   const postList = posts.map((post) => {
     return (
-      <Post
-        id={post.id}
-        title={post.title}
-        author={"Author: " + post.author}
-        key={post.id}
-      />
+      <Link to={`${post.id}`} key={post.id} >
+        <Post
+          id={post.id}
+          title={post.title}
+          author={"Author: " + post.author}
+        />
+      </Link>
+      
     );
   });
 
-  return postList;
+  return (
+    <div>
+      <div className="Posts">
+      {postList}
+      </div>
+      <div className="PostDetails">
+        <PostDetails />
+      </div>
+    </div>
+  );
 };
 
 export default Posts;

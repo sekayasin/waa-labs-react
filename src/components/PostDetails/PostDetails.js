@@ -1,20 +1,25 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { PostContext } from "../../store/PostContext";
 import Comment from "../Comment/Comment";
 import "./PostDetails.css";
+
 const PostDetails = (props) => {
   const [postDetail, setPostDetail] = useState({});
   const [postContent, setPostContent] = useState({});
   const [postComment, setPostComment] = useState([]);
 
+  const naviagate = useNavigate()
+  const params = useParams()
+
   const {setSelected, fetchFlag, selectedPost, changeFetchFlag} = useContext(PostContext)
 
   const getPostData = () => {
     let endpoints = [
-      "http://localhost:8080/api/v1/posts/" + selectedPost,
-      "http://localhost:8080/api/v1/posts/" + selectedPost + "/content",
-      "http://localhost:8080/api/v1/posts/" + selectedPost + "/comments",
+      "http://localhost:8080/api/v1/posts/" + params.id,
+      "http://localhost:8080/api/v1/posts/" + params.id + "/content",
+      "http://localhost:8080/api/v1/posts/" + params.id + "/comments",
     ];
     Promise.all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then(
@@ -33,21 +38,22 @@ const PostDetails = (props) => {
 
   useEffect(() => {
     getPostData();
-  }, [selectedPost]);
+  }, [params.id]);
 
   const deleteSelectedPost = (id) => {
     axios
       .delete("http://localhost:8080/api/v1/posts/" + id)
       .then((response) => {
         // re-fetch
-        changeFetchFlag();
+        // changeFetchFlag();
+        naviagate("/")
       })
       .catch((err) => console.log(err.message));
   };
 
   let postDetailsDisplay = null;
 
-  if (selectedPost !== 0) {
+  if (params.id) {
     postDetailsDisplay = (
       <div className="PostDetailsContent" key={postDetail.id}>
         <h1>{postDetail.title}</h1>
@@ -65,7 +71,7 @@ const PostDetails = (props) => {
           href="#delete"
           onClick={(event) => {
             event.preventDefault();
-            deleteSelectedPost(selectedPost);
+            deleteSelectedPost(params.id);
           }}
         >
           delete
